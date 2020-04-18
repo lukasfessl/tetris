@@ -1,0 +1,13 @@
+
+
+var GRID_WIDTH = 10;
+var GRID_WIDTH_START = 0;
+var GRID_WIDTH_END = GRID_WIDTH_START + GRID_WIDTH;
+
+var GRID_HEIGHT = 20;
+var GRID_HEIGHT_START = 0;
+var GRID_HEIGHT_END = GRID_HEIGHT_START + GRID_HEIGHT;
+
+var GRID_BLOCK_SIZE = 25;
+
+var GRID = new Array(GRID_HEIGHT).fill(0).map(() => new Array(GRID_WIDTH).fill(0));
