@@ -1,173 +1,162 @@
+class Game {
 
+    grid;
+    blockGenerator;
+    stats;
+    row;
+    col;
+    block;
+    blockPosition;
+    targetStep;
+    currentStep;
+    forceRedraw;
+    gameState;
 
-window.addEventListener('load', function() {
+    constructor(grid) {
+        this.grid = grid;
+        this.blockGenerator = new BlockGenerator();
+        this.stats = new Stats(1);
 
-    var canvas = document.getElementById("canvas")
-    var width = canvas.width
-    var height = canvas.height
-    var ctx = canvas.getContext("2d")
- 
+        this.row = 0;
+        this.col = 3;
 
-    var blockGenerator = new BlockGenerator();
-    var stats = new Stats(1);
-    var gameState = "";
+        this.block = this.blockGenerator.getBlock();
+        this.blockPosition = this.blockGenerator.getPosition();
 
-    var lines = 0;
-    var score = 0;
+        this.targetStep = 50;
+        this.currentStep = 0;
+        this.forceRedraw = true;
+        this.gameState = "GAME"
 
-    var row = 0;
-    var col = 3;
+        this.setPosition(0, 3);
+    }
 
-    var block = blockGenerator.getBlock();
-    var blockPosition = blockGenerator.getPosition();
-
-    var targetStep = 50;
-    var currentStep = 0;
-    var forceRedraw = true;
-
-    let grid = GRID;
-
-    setPosition(0,3);
-
-    function setPosition(row, col, val = 1) {
-        // new object is created, reset block poisition
-        block[blockPosition].map.forEach(function(value) {
-            // todo math ?
-            let tmpRow = value.row + row < 0 ? 0 : value.row + row;
-            let tmpCol = value.col + col< 0 ? 0 :value.col + col;
-            if (grid[tmpRow][tmpCol] == 2) {
-                gameState = "GAMEOVER";
+    setPosition(row, col, val = 1) {
+        for (let part of this.block[this.blockPosition].map) {
+            let tmpRow = part.row + row < 0 ? 0 : part.row + row;
+            let tmpCol = part.col + col < 0 ? 0 : part.col + col;
+            if (this.grid[tmpRow][tmpCol] == 2) {
+                this.gameState = "GAMEOVER";
             }
-            grid[tmpRow][tmpCol] = val;
-        });
+            this.grid[tmpRow][tmpCol] = val;
+        }
 
         if (val == 2) {
-            blockPosition = blockGenerator.getPosition();
-            block = blockGenerator.getBlock();
+            this.blockPosition = this.blockGenerator.getPosition();
+            this.block = this.blockGenerator.getBlock();
         }
     }
 
-    function updateInput(progress) {
+    updateInput(delta) {
         // move is readed from inputListener
         if (move) {
-            forceRedraw = true;
-            setPosition(row,col, 0)
-            if (move == "right" &&  !collidesWithRight(row, col, block[blockPosition])) {
-                col +=1;
+            this.forceRedraw = true;
+            this.setPosition(this.row, this.col, 0)
+            if (move == "right" && !collidesWithRight(this.row, this.col, this.block[this.blockPosition])) {
+                this.col += 1;
                 move = null;
             }
-            if (move == "left" && !collidesWithLeft(row, col, block[blockPosition])) {
-                col -=1;
+            if (move == "left" && !collidesWithLeft(this.row, this.col, this.block[this.blockPosition])) {
+                this.col -= 1;
                 move = null;
             }
 
             // TODO check collision s jinamz objektama a s hranou gridu
             if (move == "up") {
-                console.log(blockPosition)
-                blockPosition = block[blockPosition].nextIndex
-                console.log(blockPosition)
+                this.blockPosition = this.block[this.blockPosition].nextIndex
                 move = null;
             }
 
             if (move == "down") {
-                if (!collidesWithBottom(row, col, block[blockPosition])) {
-                    row +=1
-                    stats.addScore(1);
+                if (!collidesWithBottom(this.row, this.col, this.block[this.blockPosition])) {
+                    this.row += 1
+                    this.stats.addScore(1);
                 } else {
-                    setPosition(row,col, 2);
+                    this.setPosition(this.row, this.col, 2);
 
-               
-                    row = 0;
-                    col = 3;
+
+                    this.row = 0;
+                    this.col = 3;
                     // grid[row][col] = 1;
-                    setPosition(row,col);
+                    this.setPosition(this.row, this.col);
                     move = null;
                 }
             }
-            setPosition(row,col)
+            this.setPosition(this.row, this.col)
         }
     }
 
-
-    function updateGame(progress) {
-        if (targetStep == currentStep) {
-
-            let rowsUpdated = updateRows(progress);
-            
-            currentStep = 0;
-            setPosition(row + rowsUpdated, col, 0)
-            
+    updateGame(delta) {
+        if (this.targetStep == this.currentStep) {
+            // clear lins
+            let rowsUpdated = this.updateRows(delta);
+            this.currentStep = 0;
+            this.setPosition(this.row + rowsUpdated, this.col, 0)
             // move down
-            if (!collidesWithBottom(row, col, block[blockPosition])) {
-                // grid[row][col] = 0
-                row +=1
-
-                setPosition(row,col);
-                // grid[row][col] = 1;
-                // this.console.log(grid)
-            // colision with cube   
+            if (!collidesWithBottom(this.row, this.col, this.block[this.blockPosition])) {
+                this.row += 1
+                this.setPosition(this.row, this.col);
+                // colision with cube   
             } else {
-                setPosition(row,col, 2);
-      
+                this.setPosition(this.row, this.col, 2);
                 // create new block
-                row = 0;
-                col = 3;
-                // grid[row][col] = 1;
-                setPosition(row,col);
+                this.row = 0;
+                this.col = 3;
+                this.setPosition(this.row, this.col);
                 move = null
             }
-
         } else {
-            currentStep ++;
+            this.currentStep++;
         }
     }
 
-    function updateRows(progress) {
-
+    updateRows(delta) {
         var filledLines = [];
-
+        // count lines to clear
         for (var row = 0; row < grid.length; row++) {
-
             var line = 0;
             for (var col = 0; col < grid[row].length; col++) {
-                if (grid[row][col] == 2) {
+                if (grid[row][col] >= 2) {
                     line++;
                 } else {
                     break;
-                }            
+                }
             }
 
             if (line == GRID_WIDTH) {
                 filledLines.push(row);
             }
         }
-
-    
-        filledLines.forEach(function(line) {
-            grid.splice(line,1)
-            grid.unshift(new Array(GRID_WIDTH).fill(0))
-        });
-        let lastLevel = stats.getLevel(); 
-        stats.addLines(filledLines.length);
-        stats.addScore(filledLines.length * filledLines.length * 1000)
-        if (lastLevel != stats.getLevel()) {
-            targetStep -= 5; 
+        // clear lines
+        for (let line of filledLines) {
+            this.grid.splice(line, 1)
+            this.grid.unshift(new Array(GRID_WIDTH).fill(0))
+        }
+        // update stats
+        let lastLevel = this.stats.getLevel();
+        this.stats.addLines(filledLines.length);
+        this.stats.addScore(filledLines.length * filledLines.length * 1000)
+        if (lastLevel != this.stats.getLevel()) {
+            this.targetStep -= 5;
         }
         return filledLines.length;
     }
 
-    function update(progress) {
-        if (gameState == "GAMEOVER") {
+
+    // update method
+    update(delta) {
+        if (this.gameState == "GAMEOVER") {
             return;
         }
-        updateInput(progress);
-
-        updateGame(progress);
+        this.updateInput(delta);
+        this.updateGame(delta);
     }
 
-    function draw() {
-        if (currentStep == 0 || forceRedraw) {
-            forceRedraw = false
+
+    // draw method
+    draw(ctx, width, height) {
+        if (this.currentStep == 0 || this.forceRedraw) {
+            this.forceRedraw = false
             ctx.clearRect(0, 0, width, height)
 
             for (var row = 0; row < grid.length; row++) {
@@ -182,43 +171,31 @@ window.addEventListener('load', function() {
                         // ctx.fillStyle = "#AAA000"; // yellow
                         // ctx.fillRect(col * GRID_BLOCK_SIZE, row * GRID_BLOCK_SIZE, GRID_BLOCK_SIZE, GRID_BLOCK_SIZE);
                     }
-                
+
                 }
-            } 
+            }
 
             ctx.rect(GRID_WIDTH_START * GRID_BLOCK_SIZE, GRID_HEIGHT_START * GRID_BLOCK_SIZE, GRID_WIDTH_END * GRID_BLOCK_SIZE, GRID_HEIGHT_END * GRID_BLOCK_SIZE);
             ctx.stroke();
 
-            stats.drawScore(ctx, 30, 300);
-            stats.drawLines(ctx, 90, 300);
-            stats.drawLevel(ctx, 160, 300);
-            blockGenerator.drawNextBlock(ctx, 300, 300)
+            this.stats.drawScore(ctx, 30, 300);
+            this.stats.drawLines(ctx, 90, 300);
+            this.stats.drawLevel(ctx, 160, 300);
+            this.blockGenerator.drawNextBlock(ctx, 300, 300)
         }
 
-        if (gameState == "GAMEOVER") {
+        if (this.gameState == "GAMEOVER") {
             ctx.fillStyle = "#000000";
             ctx.font = "80px Arial";
             ctx.fillText("Game over", 200, 200);
         }
 
-        if (gameState == "PAUSE") {
+        if (this.gameState == "PAUSE") {
             ctx.fillStyle = "#000000";
             ctx.font = "80px Arial";
             ctx.fillText("Pause", 200, 200);
         }
-      
+
     }
 
-    // GAME LOOP
-    function loop(timestamp) {
-        var progress = timestamp - lastRender
-
-        update(progress)
-        draw()
-
-        lastRender = timestamp
-        window.requestAnimationFrame(loop)
-    }
-    var lastRender = 0
-    window.requestAnimationFrame(loop)
-});
+}

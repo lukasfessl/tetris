@@ -1,10 +1,10 @@
 
 var move;
 
-document.addEventListener('keydown', logKey);
+document.addEventListener('keydown', logKeyDown);
 document.addEventListener('keyup', logKeyUp);
 
-function logKey(e) {
+function logKeyDown(e) {
     if (e.keyCode == 39) {
         move = "right"
     }
