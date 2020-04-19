@@ -38,6 +38,7 @@ class Game {
             let tmpRow = part.row + row < 0 ? 0 : part.row + row;
             let tmpCol = part.col + col < 0 ? 0 : part.col + col;
             if (this.grid[tmpRow][tmpCol] >= 10) {
+                console.log("Game ofer")
                 this.gameState = "GAMEOVER";
             }
             this.grid[tmpRow][tmpCol] = val;
@@ -67,9 +68,13 @@ class Game {
                 move = null;
             }
 
-            // TODO check collision s jinamz objektama a s hranou gridu
             if (move == "up") {
-                this.blockPosition = this.block.data[this.blockPosition].nextIndex
+                let blockPosition = this.block.data[this.blockPosition].nextIndex
+                let outSize = countOutside(this.row, this.col, this.block.data[blockPosition]);
+                if (canRotate(this.row, this.col - outSize, this.block.data[blockPosition])) {
+                    this.col -= outSize;
+                    this.blockPosition = this.block.data[this.blockPosition].nextIndex
+                }
                 move = null;
             }
 

@@ -1,7 +1,7 @@
 class BlockGenerator {
 
     blocks = [line, triangle, rightL, leftL, esL, esR, cube];
-
+    
     block;
     position;
 
@@ -47,7 +47,6 @@ class BlockGenerator {
             ctx.fillRect(col * GRID_BLOCK_SIZE, row * GRID_BLOCK_SIZE, GRID_BLOCK_SIZE, GRID_BLOCK_SIZE);
             ctx.fillStyle = resolverBlockColor(this.block.name);
             ctx.fillRect(col + 50 + (part.col * GRID_BLOCK_SIZE) + 1, row + (part.row * GRID_BLOCK_SIZE) + 1, GRID_BLOCK_SIZE - 2, GRID_BLOCK_SIZE - 2);
-
         }
      
     }
