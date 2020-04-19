@@ -16,3 +16,23 @@ body {
 #canvas {
     background-color: black;
 }
+
+footer {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    color: white;
+
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.github {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: red;
+}

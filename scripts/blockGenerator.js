@@ -1,32 +1,32 @@
 class BlockGenerator {
 
     blocks = [line, triangle, rightL, leftL, esL, esR, cube];
-    
+
     block;
     position;
 
     constructor() {
-        this.block = this.generateRangomBlock();
-        this.position = this.generateRangomBlockPosition()
+        this.block = this.generateRandomBlock();
+        this.position = this.generateRandomBlockPosition()
     }
 
     getBlock() {
         let currentBlock = this.block;
-        this.block = this.generateRangomBlock();
+        this.block = this.generateRandomBlock();
         return currentBlock;
     }
 
     getPosition() {
         let currentPosition = this.position;
-        this.position = this.generateRangomBlockPosition();
+        this.position = this.generateRandomBlockPosition();
         return currentPosition;
     }
 
-    generateRangomBlock() {
+    generateRandomBlock() {
         return this.blocks[Math.floor(Math.random() * this.blocks.length)];
     }
 
-    generateRangomBlockPosition() {
+    generateRandomBlockPosition() {
         return Math.floor(Math.random() * this.block.data.length);
     }
 
