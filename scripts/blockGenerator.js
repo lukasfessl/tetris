@@ -27,7 +27,7 @@ class BlockGenerator {
     }
 
     generateRangomBlockPosition() {
-        return Math.floor(Math.random() * this.block.length);
+        return Math.floor(Math.random() * this.block.data.length);
     }
 
     readNextBlock() {
@@ -39,13 +39,17 @@ class BlockGenerator {
     }
 
     drawNextBlock(ctx, row, col) {
-        ctx.fillStyle = "#000000";
+        ctx.fillStyle = "#FFFFFF";
         ctx.font = "30px Arial";
         ctx.fillText("Next block", col, row - 50);
-        this.block[this.position].map.map(function(part) {
-            ctx.fillStyle = "#000000"; // black
-            ctx.fillRect(col + 50 + (part.col * GRID_BLOCK_SIZE), row + (part.row * GRID_BLOCK_SIZE), GRID_BLOCK_SIZE, GRID_BLOCK_SIZE);
-        });
+        for (let part of this.block.data[this.position].map) {
+            ctx.fillStyle = "black";
+            ctx.fillRect(col * GRID_BLOCK_SIZE, row * GRID_BLOCK_SIZE, GRID_BLOCK_SIZE, GRID_BLOCK_SIZE);
+            ctx.fillStyle = resolverBlockColor(this.block.name);
+            ctx.fillRect(col + 50 + (part.col * GRID_BLOCK_SIZE) + 1, row + (part.row * GRID_BLOCK_SIZE) + 1, GRID_BLOCK_SIZE - 2, GRID_BLOCK_SIZE - 2);
+
+        }
+     
     }
 
 }

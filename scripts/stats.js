@@ -26,19 +26,19 @@ class Stats {
     }
 
     drawLines(ctx, row, col) {
-        ctx.fillStyle = "#000000";
+        ctx.fillStyle = "#FFFFFF";
         ctx.font = "30px Arial";
         ctx.fillText("Lines: " + this.lines, col, row);
     }
 
     drawScore(ctx, row, col) {
-        ctx.fillStyle = "#000000";
+        ctx.fillStyle = "#FFFFFF";
         ctx.font = "30px Arial";
         ctx.fillText("Score: " + this.score, col, row);
     }
 
     drawLevel(ctx, row, col) {
-        ctx.fillStyle = "#000000";
+        ctx.fillStyle = "#FFFFFF";
         ctx.font = "30px Arial";
         ctx.fillText("Level: " + this.level, col, row);
     }

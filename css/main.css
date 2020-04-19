@@ -1,0 +1,18 @@
+
+body {
+    margin: 0px;
+    padding: 0px;
+    background-image: url('../img/bg.png');
+    background-color: black;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    padding-top: 80px;
+    
+}
+
+#canvas {
+    background-color: black;
+}

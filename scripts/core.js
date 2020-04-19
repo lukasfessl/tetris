@@ -27,7 +27,9 @@ window.addEventListener('load', function() {
         draw()
 
         lastRender = timestamp
-        window.requestAnimationFrame(loop)
+        if (!screen.isPause()) {
+            window.requestAnimationFrame(loop)
+        }
     }
     var lastRender = 0
     window.requestAnimationFrame(loop)
