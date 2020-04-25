@@ -1,9 +1,14 @@
 
 function resolverBlockColor(block, level) {
 
-    var colors = 8; 
-    var index = Math.floor(level / 2 - 1) % colors;
-    index = index < 0 ? 0 : index;
+    if (localStorage.getItem('colors') == 'disabled') {
+        var index = 0;
+    } else {
+        var colors = 8; 
+        var index = Math.floor(level / 2 - 1) % colors;
+        index = index < 0 ? 0 : index;
+    }
+    
 
     switch(block) {
         // GOLD, GREEN, BLUE, RED, PURPLE, ORANGE, MAROON, PINK
