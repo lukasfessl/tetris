@@ -38,7 +38,6 @@ class Game {
             let tmpRow = part.row + row < 0 ? 0 : part.row + row;
             let tmpCol = part.col + col < 0 ? 0 : part.col + col;
             if (this.grid[tmpRow][tmpCol] >= 10) {
-                console.log("Game ofer")
                 this.gameState = "GAMEOVER";
             }
             this.grid[tmpRow][tmpCol] = val;
@@ -96,7 +95,7 @@ class Game {
     }
 
     updateGame(delta) {
-        if (this.targetStep == this.currentStep) {
+        if (this.targetStep <= this.currentStep) {
             // clear lins
             let rowsUpdated = this.updateRows(delta);
             this.currentStep = 0;
@@ -145,18 +144,16 @@ class Game {
         let lastLevel = this.stats.getLevel();
         this.stats.addLines(filledLines.length);
         this.stats.addScore(filledLines.length * filledLines.length * 1000)
-        if (lastLevel != this.stats.getLevel()) {
-            this.targetStep -= 5;
+        if (lastLevel != this.stats.getLevel() && this.stats.getLevel() != 0 ) {
+            this.targetStep -= this.targetStep / 10;
         }
         return filledLines.length;
     }
 
 
     // update method
+    
     update(delta) {
-        if (this.gameState == "GAMEOVER") {
-            return;
-        }
         this.updateInput(delta);
         this.updateGame(delta);
     }
@@ -180,7 +177,6 @@ class Game {
         if (this.currentStep == 0 || this.forceRedraw) {
             this.forceRedraw = false
             ctx.clearRect(0, 0, width, height)
-            
 
             for (var row = 0; row < grid.length; row++) {
                 for (var col = 0; col < grid[row].length; col++) {
@@ -214,10 +210,11 @@ class Game {
 
     }
 
-    isPause() {
-        if (this.gameState == "GAMEOVER") {
-            return true;
-        }
+    getGameState() {
+        return this.gameState;
     }
 
+    getStats() {
+        return this.stats;
+    }
 }

@@ -27,8 +27,11 @@ window.addEventListener('load', function() {
         draw()
 
         lastRender = timestamp
-        if (!screen.isPause()) {
+
+        if (screen.getGameState() != "GAMEOVER") {
             window.requestAnimationFrame(loop)
+        } else if (screen.getGameState() == "GAMEOVER") {
+            showAlert(screen.getStats());
         }
     }
     var lastRender = 0

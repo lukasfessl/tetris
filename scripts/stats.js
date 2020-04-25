@@ -18,7 +18,7 @@ class Stats {
 
     addLines(lines) {
         this.lines += lines;
-        this.level = (this.lines / this.linesToNextLevel).toFixed(0);
+        this.level = Math.floor(this.lines / this.linesToNextLevel);
     }
 
     getLevel() {
