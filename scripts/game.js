@@ -181,7 +181,7 @@ class Game {
             for (var row = 0; row < grid.length; row++) {
                 for (var col = 0; col < grid[row].length; col++) {
                     if (grid[row][col] >= 10 || grid[row][col] == 1) {
-                        this.drawBlocks(ctx, col, row, resolverBlockColor(grid[row][col]));
+                        this.drawBlocks(ctx, col, row, resolverBlockColor(grid[row][col], this.stats.getLevel()));
                     }
                 }
             }
@@ -189,7 +189,7 @@ class Game {
             this.stats.drawScore(ctx, 50, 300);
             this.stats.drawLines(ctx, 110, 300);
             this.stats.drawLevel(ctx, 180, 300);
-            this.blockGenerator.drawNextBlock(ctx, 300, 300)
+            this.blockGenerator.drawNextBlock(ctx, 300, 300, this.stats.getLevel())
         }
 
         if (this.gameState == "GAMEOVER") {
@@ -198,12 +198,6 @@ class Game {
             ctx.fillText("Game over", 30, 250);
         }
 
-        if (this.gameState == "PAUSE") {
-            ctx.fillStyle = "#FFFFFF";
-            ctx.font = "80px Arial";
-            ctx.fillText("Pause", 30, 250);
-        }
-        
         ctx.rect(GRID_WIDTH_START * GRID_BLOCK_SIZE, GRID_HEIGHT_START * GRID_BLOCK_SIZE, GRID_WIDTH_END * GRID_BLOCK_SIZE, GRID_HEIGHT_END * GRID_BLOCK_SIZE);
         ctx.strokeStyle = "#FFFFFF";
         ctx.stroke();

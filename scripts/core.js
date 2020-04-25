@@ -31,6 +31,7 @@ window.addEventListener('load', function() {
         if (screen.getGameState() != "GAMEOVER") {
             window.requestAnimationFrame(loop)
         } else if (screen.getGameState() == "GAMEOVER") {
+            screen.gameState = "GAMEOVER";
             showAlert(screen.getStats());
         }
     }

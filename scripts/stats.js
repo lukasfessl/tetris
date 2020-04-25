@@ -9,7 +9,7 @@ class Stats {
         this.score = 0;
         this.lines = 0;
         this.level = level;
-        this.linesToNextLevel = 5;
+        this.linesToNextLevel = 4;
     }
 
     addScore(score) {
@@ -18,7 +18,7 @@ class Stats {
 
     addLines(lines) {
         this.lines += lines;
-        this.level = Math.floor(this.lines / this.linesToNextLevel);
+        this.level = Math.floor(this.lines / this.linesToNextLevel) + 1;
     }
 
     getLevel() {
