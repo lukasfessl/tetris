@@ -145,7 +145,7 @@ class Game {
         this.stats.addLines(filledLines.length);
         this.stats.addScore(filledLines.length * filledLines.length * 1000)
         if (lastLevel != this.stats.getLevel() && this.stats.getLevel() != 0 ) {
-            this.targetStep -= this.targetStep / 10;
+            this.targetStep -= this.targetStep / 7;
         }
         return filledLines.length;
     }
